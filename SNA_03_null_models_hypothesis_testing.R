@@ -15,7 +15,7 @@
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Install required libraries:
-# install.packages(c("igraph", "data.table", "lubridate", "sp", "rgeos", 
+# install.packages(c("igraph", "data.table", "lubridate", "sp", "sf", 
 #                    "abind", "randomcoloR", "ggplot2", "ggraph", 
 #                    "adehabitatHR"))
 
@@ -24,7 +24,7 @@ library(igraph)
 library(data.table)
 library(lubridate)
 library(sp)
-library(rgeos)
+library(sf)
 library(abind)
 library(adehabitatHR)
 
@@ -132,7 +132,7 @@ adjMat <- function(tr) {
     tr_sub <- tr[tr$date.time == t, ]
     
     # Calculate distances between individuals
-    dist_sub <- gDistance(tr_sub, byid = TRUE)
+    dist_sub <- st_distance(st_as_sf(tr_sub))
     colnames(dist_sub) <- tr_sub$tag.id
     rownames(dist_sub) <- tr_sub$tag.id
     
@@ -233,9 +233,9 @@ unlist(mean_deg) # Convert the list to a vector
 # Plot the degree distribution using the "lapply" function
 boxplot(lapply(null_net_list, degree))
 
-# Apply the functions to generate 500 null-networks. This part takes quite a
-# long time to run, soyou can directly load the resulting list with null 
-# networks running the code some lines below.
+# # Apply the functions to generate 500 null-networks. This part takes quite a
+# # long time to run, so you can directly load the resulting list with null 
+# # networks running the code some lines below.
 # set.seed(28)
 # null_net_list <- lapply(1:500, function(i) {
 #   cat("\nGeneraring null network no.", i, "\n")
@@ -261,9 +261,9 @@ length(null_net_list)
 getParam <- function(net) {
   
   # Separate networks depending on the type
-  net_mm <- delete.vertices(net, V(net)$sex == "F")
-  net_ff <- delete.vertices(net, V(net)$sex == "M")
-  net_mf <- delete.edges(net, E(net)[E(net)$type %in% c("M-M", "F-F")])
+  net_mm <- delete_vertices(net, V(net)$sex == "F")
+  net_ff <- delete_vertices(net, V(net)$sex == "M")
+  net_mf <- delete_edges(net, E(net)[E(net)$type %in% c("M-M", "F-F")])
   
   # Network parameters:
   # Number of edges

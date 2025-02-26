@@ -15,7 +15,7 @@
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Install required libraries:
-# install.packages(c("igraph", "data.table", "lubridate", "sp", "rgeos", 
+# install.packages(c("igraph", "data.table", "lubridate", "sp", "sf", 
 #                    "abind", "randomcoloR", "ggplot2", "ggraph"))
 
 # Load libraries
@@ -103,7 +103,7 @@ V(net)$extra_attribute
 E(net)$weight
 
 # We can get back a data.frame with the edges
-df <- get.data.frame(net)
+df <- as_data_frame(net)
 head(df)
 
 # Or an adjacency matrix of the network

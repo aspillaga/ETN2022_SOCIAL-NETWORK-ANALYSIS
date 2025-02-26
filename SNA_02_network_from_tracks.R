@@ -15,7 +15,7 @@
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Install required libraries:
-# install.packages(c("igraph", "data.table", "lubridate", "sp", "rgeos", 
+# install.packages(c("igraph", "data.table", "lubridate", "sp", "sf", 
 #                    "abind", "randomcoloR", "ggplot2", "ggraph"))
 
 # Load libraries
@@ -23,7 +23,7 @@ library(igraph)
 library(data.table)
 library(lubridate)
 library(sp)
-library(rgeos)
+library(sf)
 library(abind)
 library(randomcoloR)
 
@@ -145,7 +145,8 @@ dist_list <- lapply(times, function(t) {
   tr_sub <- tracks[tracks$date.time == t, ]
   
   # Calculate distances between individuals
-  dist_sub <- gDistance(tr_sub, byid = TRUE)
+  dist_sub <- st_distance(st_as_sf(tr_sub))
+  
   colnames(dist_sub) <- tr_sub$tag.id
   rownames(dist_sub) <- tr_sub$tag.id
   
@@ -255,13 +256,13 @@ barplot(table(edges$type), ylab = "No. of edges")
 boxplot(log(edges$weight) ~ edges$type)
 
 # Separate networks depending on the type
-net_mm <- delete.vertices(net, V(net)$sex == "F")
+net_mm <- delete_vertices(net, V(net)$sex == "F")
 V(net_mm)$sex
 unique(E(net_mm)$type)
-net_ff <- delete.vertices(net, V(net)$sex == "M")
+net_ff <- delete_vertices(net, V(net)$sex == "M")
 V(net_ff)$sex
 unique(E(net_ff)$type)
-net_mf <- delete.edges(net, E(net)[E(net)$type %in% c("M-M", "F-F")])
+net_mf <- delete_edges(net, E(net)[E(net)$type %in% c("M-M", "F-F")])
 degree(net_mf)
 unique(E(net_mf)$type)
 

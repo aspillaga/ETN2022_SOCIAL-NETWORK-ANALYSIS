@@ -8,8 +8,8 @@ A PDF version of the slides of the course is provided: `SNA_ETN_Trainning_School
 The practical session can be followed by running the scripts and using the data stored in the "data" directory. But before, make sure that the following packages are installed in R:
 
 ```r
-install.packages(c("igraph", "data.table", "lubridate", "sp", 
-                   "rgeos", "abind", "randomcoloR", "ggplot2", "ggraph"))
+install.packages(c("igraph", "data.table", "lubridate", "sp", "sf", "abind", 
+                   "randomcoloR", "ggplot2", "ggraph"))
 ```
 
 A recording of the training session is accessible at this [link](https://youtu.be/QVf-xrpazKs?si=_nA8YrEP3SjDxerS) from the [European Tracking Network YouTube channel](https://www.youtube.com/@europeantrackingnetwork).
